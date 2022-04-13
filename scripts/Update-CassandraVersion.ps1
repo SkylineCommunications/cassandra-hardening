@@ -1,7 +1,7 @@
 #Requires -RunAsAdministrator
 param ($binaries, $cassandra_home = 'C:\Program Files\Cassandra')
 
-# Example usage: .\update-cassandra.ps1 -binaries "C:\Users\UserName\Downloads\apache-cassandra-3.11.12"
+# Example usage: .\Update-CassandraVersion.ps1 -binaries "C:\Users\UserName\Downloads\apache-cassandra-3.11.12"
 # Note the contents of the $binaries path should be the bin/conf/tools/... folders from Cassandra
 
 # Constants
@@ -28,7 +28,7 @@ if ($foundBinaries -eq $False) {
     throw "Cannot continue, $binaries does not exist"
 }
 
-Write-Host "Cassandra binaries are located in: $binaries"
+Write-Host "New Cassandra binaries are located in: $binaries"
 
 $foundCassandra = Test-Path $cassandra_home
 
@@ -42,7 +42,7 @@ if ($foundDataMiner -eq $True) {
     Stop-DataMiner
 }
 
-$service = Get-Service -Name W32Time -ErrorAction SilentlyContinue
+$service = Get-Service -Name $cassandra_service_name -ErrorAction SilentlyContinue
 
 if ($service.Length -gt 0) {
     Write-Host "Stopping the $cassandra_service_name service"
@@ -99,8 +99,13 @@ Write-Host "Starting the $cassandra_service_name service"
 Start-Service -Name $cassandra_service_name
 
 $location = Get-Location
-cd 'C:\progra~1\Cassandra\bin\'
-.\nodetool version
-cd $location.Path
+Set-Location 'C:\progra~1\Cassandra\bin\'
+$newVersion = .\nodetool version
+Set-Location $location.Path
 
-Write-Host 'Cassandra was updated, check if the service is running'
+if ($foundDataMiner -eq $True) {
+    Write-Host 'Starting DataMiner again'
+    Start-Service -Name 'SLDataMiner'
+}
+
+Write-Host "Cassandra version was updated to $newVersion, please verify the $cassandra_service_name service is running"
