@@ -165,8 +165,6 @@ Write-Host "Setting the $($cassandraServiceName) service Log On user"
 $hostName = cmd.exe /c 'hostname'
 
 $service = gwmi win32_service -computer $hostName -filter "name='$($cassandraServiceName)'"
-
-Write-Host "Password is: $pwd1_text"
 $service.change($null, $null, $null, $null, $null, $false, ".\$($userName)", $pwd1_text)
 
 # Start service  
