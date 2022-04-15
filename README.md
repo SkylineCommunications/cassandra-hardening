@@ -15,6 +15,9 @@ Execute the script from an Administrator PowerShell console.
 
 `.\Edit-CassandraServiceUser.ps1`
 
+For more usage info, execute:
+
+`Get-Help .\Edit-CassandraServiceUser.ps1 -Detailed`
 
 ## Update-CassandraVersion.ps1
 
