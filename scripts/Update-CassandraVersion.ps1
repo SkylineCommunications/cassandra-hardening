@@ -1,15 +1,41 @@
 #Requires -RunAsAdministrator
-param ($binaries, $cassandra_home = 'C:\Program Files\Cassandra')
 
-# Example usage: .\Update-CassandraVersion.ps1 -binaries "C:\Users\UserName\Downloads\apache-cassandra-3.11.12"
-# Note the contents of the $binaries path should be the bin/conf/tools/... folders from Cassandra
+<#
+.SYNOPSIS
+    A script to update the Apache Cassandra version.
+.DESCRIPTION
+    This script will update the Cassandra version, based on new binaries provided by the -binaries parameter.
+    A backup of the old Cassandra installation is created by renaming the current -cassandra_home folder to <cassandra_home>_bak_<date>
+.PARAMETER binaries
+    The path to the new Apache Cassandra binaries. These will be installed in the -cassandra_home folder.
+.PARAMETER cassandra_home
+    The path to the current Cassandra installation folder.
+.EXAMPLE
+    PS> .\Update-CassandraVersion.ps1 -binaries "C:\Users\UserName\Downloads\apache-cassandra-3.11.12"
+.LINK
+    Find the latest version on GitHub: https://github.com/SkylineCommunications/cassandra-hardening
+#>
+param (
+    # Path to the new Cassandra binaries
+    [Parameter(Mandatory)]
+    [String]$binaries, 
+    # Path to the Cassandra installation folder.
+    [String]$cassandra_home = 'C:\Program Files\Cassandra',
+    # Displays this help
+    [Switch]$help
+)
 
 # Constants
 Set-Variable cassandra_service_name -Option Constant -Value 'cassandra'
 Set-Variable slkill_path -Option Constant -Value 'C:\Skyline DataMiner\Files\SLKill.exe'
-Set-Variable cassandra_home_bak -Option Constant -Value ($cassandra_home + '_bak')
+Set-Variable cassandra_home_bak -Option Constant -Value ($cassandra_home + '_bak_' + (Get-Date -Format 'yyyy_MM_dd_HH_mm_ss'))
 
 #region Functions
+
+if ($help -eq $True) {
+    Get-Help ".\\$($MyInvocation.MyCommand.Name)" -Detailed
+    return
+}
 
 Function Stop-DataMiner {
     Write-Host 'Stopping DataMiner'
