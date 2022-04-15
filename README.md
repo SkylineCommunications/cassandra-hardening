@@ -15,6 +15,7 @@ Execute the script from an Administrator PowerShell console.
 
 `.\Edit-CassandraServiceUser.ps1`
 
+
 ## Update-CassandraVersion.ps1
 
 A PowerShell script that will update the Cassandra version. The latest version of Apache Cassandra can be downloaded from [cassandra.apache.org](https://cassandra.apache.org/_/download.html).
@@ -25,6 +26,10 @@ Execute the script from an Administrator PowerShell console.
 
 `.\Update-CassandraVersion.ps1 -binaries "C:\Users\John\Download\apache-cassandra-3.11.12"`
 
+For more usage info, execute:
+
+`Get-Help .\Update-CassandraVersion.ps1 -Detailed`
+
 ## Update-CassandraJavaVersion.ps1
 
 A PowerShell script that will update the Java OpenJDK version used by Cassandra. The latest Java OpenJDK version can be downloaded from [wiki.openjdk.java.net](https://wiki.openjdk.java.net/display/jdk8u/Main). For example: *OpenJDK8U-jre_x64_windows_8u322b06.zip*.
@@ -34,3 +39,7 @@ A PowerShell script that will update the Java OpenJDK version used by Cassandra.
 Execute the script from an Administrator PowerShell console.
 
 `.\Update-CassandraJavaVersion.ps1 -binaries "C:\Users\John\Download\openjdk-8u322-b06-jre"`
+
+For more usage info, execute:
+
+`Get-Help .\Update-CassandraJavaVersion.ps1 -Detailed`
