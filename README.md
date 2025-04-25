@@ -21,7 +21,7 @@ For more usage info, execute:
 
 ## Update-CassandraVersion.ps1
 
-A PowerShell script that will update the Cassandra version. The latest version of Apache Cassandra can be downloaded from [cassandra.apache.org](https://cassandra.apache.org/_/download.html).
+A PowerShell script that will update the Cassandra version. Any version of Apache Cassandra can be downloaded from the [Apache Archive Distribution Directory](https://cassandra.apache.org/_/download.html). Make sure to download the Cassandra version that ends in "-bin.tar.gz" and extract it to use as your path.
 
 ### Usage
 
