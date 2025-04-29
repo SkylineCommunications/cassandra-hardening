@@ -26,9 +26,9 @@ param (
 )
 
 # Constants
-Set-Variable cassandra_service_name -Option Constant -Value 'cassandra'
-Set-Variable slkill_path -Option Constant -Value 'C:\Skyline DataMiner\Files\SLKill.exe'
-Set-Variable cassandra_home_bak -Option Constant -Value ($cassandra_home + '_bak_' + (Get-Date -Format 'yyyy_MM_dd_HH_mm_ss'))
+$cassandra_service_name = 'cassandra'
+$slkill_path = 'C:\Skyline DataMiner\Files\SLKill.exe'
+$cassandra_home_bak = "$cassandra_home" + '_bak_' + (Get-Date -Format 'yyyy_MM_dd_HH_mm_ss')
 
 #region Functions
 
@@ -101,13 +101,29 @@ Copy-Item ($cassandra_home_bak + '\conf\cassandra.yaml') -Destination ($cassandr
 $env:CASSANDRA_HOME = 'C:\progra~1\Cassandra\'
 $env:JAVA_HOME = 'C:\progra~1\Cassandra\Java\'
 
-Write-Host 'Updating Cassandra service'
+
+
+#Write-Host 'Updating Cassandra service'
+#Invoke-Expression 'C:\progra~1\Cassandra\bin\cassandra.ps1 -install | Write-Host'
+#Start-Sleep -Seconds 5
+#Write-Host 'Cassandra service is updated'
+
+Write-Host 'Installing Cassandra service...'
 Invoke-Expression 'C:\progra~1\Cassandra\bin\cassandra.ps1 -install | Write-Host'
 Start-Sleep -Seconds 5
+
+Write-Host 'Checking for Cassandra service...'
+Get-Service | Where-Object { $_.DisplayName -like "*cassandra*" }
+
+Write-Host 'Setting Cassandra service logon to LocalSystem...'
+Start-Process -FilePath "sc.exe" -ArgumentList 'config', 'cassandra', 'obj= "LocalSystem"', 'password= ""' -NoNewWindow -Wait
+
+Start-Sleep -Seconds 2
 Write-Host 'Cassandra service is updated'
 
+
 Write-Host 'Setting Jvm registry key to correct path'
-Set-ItemProperty -Path 'HKLM:\SOFTWARE\WOW6432Node\Apache Software Foundation\Procrun 2.0\cassandra\Parameters\Java' -Name 'Jvm' -Value 'C:\Program Files\Cassandra\Java\bin\server\jvm.dll'
+Set-ItemProperty -Path 'HKLM:\SOFTWARE\WOW6432Node\Apache Software Foundation\Procrun 2.0\cassandra\Parameters\Java' -Name 'Jvm' -Value 'C:\Program Files\Cassandra\Java\jre\bin\server\jvm.dll'
 
 Write-Host 'Enabling Cassandra startup setting: ignorereplayerrors=true'
 $options = Get-ItemProperty -Path 'HKLM:\SOFTWARE\WOW6432Node\Apache Software Foundation\Procrun 2.0\cassandra\Parameters\Java' -Name 'Options'
