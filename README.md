@@ -1,5 +1,9 @@
 # Cassandra Hardening
 
+ > [!WARNING]  
+> This repository has been archived.
+> All Cassandra versions that support windows installations are end-of-life. Since the scripts within this repository are specific for these Windows installations of Cassandra, they will no longer be updated.
+
 This repository contains a collection of PowerShell scripts to easily secure the Cassandra database used by DataMiner.
 
 # Scripts
